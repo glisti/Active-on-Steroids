@@ -21,6 +21,7 @@ SECRET_KEY = '1x3ta9du@5f5g5mm+p15dr_nnuj1y84j@^5ar0rz#27@xxkkht'
 
 ALLOWED_HOSTS = []
 
+DATABASES={}
 
 # Application definition
 
