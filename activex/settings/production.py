@@ -1,6 +1,6 @@
 # from .base import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 WSGI_APPLICATION = 'activex.wsgi.application'
