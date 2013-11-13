@@ -14,3 +14,5 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'activex.db'),
     }
 }
+
+INSTALLED_APPS += ('dashboard',)
