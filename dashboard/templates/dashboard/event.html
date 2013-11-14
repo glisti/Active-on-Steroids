@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %} The Fun Run {% endblock title %}
+
+{% block content %}
+    
+    <div class="row">
+        <div class="col-md-8">
+            <h1>The Fun Run <small>BCS Running Co.</small></h1>
+            <hr/>
+            
+            <h4>Date</h4>
+            <p>1/1/2014 12:59 pm</p>
+            
+            <h4>Location</h4>
+            <p>Downtown Bryan</p>
+
+            <h4>Rating</h4>
+            <p>
+                <span class="glyphicon glyphicon-star"></span>
+                <span class="glyphicon glyphicon-star"></span>
+                <span class="glyphicon glyphicon-star"></span>
+                <span class="glyphicon glyphicon-star"></span>
+                <span class="glyphicon glyphicon-star"></span>
+            </p>
+            
+            <h4>Desciption</h4>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing 
+                elit. Temporibus, unde, perspiciatis eos recusandae excepturi 
+                laboriosam placeat quae quisquam omnis fugiat assumenda quas 
+                reprehenderit eum nihil molestias ab odit id optio!
+            </p>
+        </div><!--/.col-md-8 -->
+
+        <div class="col-md-4">
+            <h3>Related Events</h3>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a href="{% url 'dashboard:event' %}">Event Title</a>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                     Event details including:
+                    <ul>
+                        <li>date</li>
+                        <li>rating</li>
+                        <li>small description</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a href="{% url 'dashboard:event' %}">Event Title</a>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                     Event details including:
+                    <ul>
+                        <li>date</li>
+                        <li>rating</li>
+                        <li>small description</li>
+                    </ul>
+                </div>
+            </div>
+        </div><!--/.col-md-4 -->
+    </div><!--/.row -->
+
+{% endblock content %}
