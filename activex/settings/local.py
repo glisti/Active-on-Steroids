@@ -15,4 +15,7 @@ DATABASES = {
     }
 }
 
-INSTALLED_APPS += ('dashboard',)
+INSTALLED_APPS += (
+    'dashboard',
+    'profiles',
+)

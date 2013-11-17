@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}| Register {% endblock title %}
+{% block content %}
+    <h1>Registration</h1>
+    <hr/>
+    <div class="row">
+        <form action="" method="post" class="form-horizontal well">
+            {% csrf_token %}
+            <h3>User Information</h3>
+            <hr/>
+            <div class="form-group">
+                <label for="id_username" class="col-md-2 col-md-offset-2 control-label">Username</label>
+                <div class="col-md-4">
+                    {{ form.username }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="id_password1" class="col-md-2 col-md-offset-2 control-label">Password</label>
+                <div class="col-md-4">
+                    {{ form.password1 }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="id_password2" class="col-md-2 col-md-offset-2 control-label">Password Confirmation</label>
+                <div class="col-md-4">
+                    {{ form.password2 }}
+                </div>
+            </div>
+            <h3>Activity Information</h3>
+            <hr/>
+            <div class="form-group">
+                <label for="id_race_type" class="col-md-2 col-md-offset-2 control-label">Race Type</label>
+                <div class="col-md-4">
+                    {{ form.race_type }}
+                    <span class="help-block">What is your favorite type of distance to run?</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-4 col-md-4">
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
