@@ -1,4 +1,6 @@
+
 #CSCE 470 Final Project
+
 import json, re
 import urllib2
 import sys
@@ -12,24 +14,6 @@ def tokenize(text):
 
     tokens = re.findall("[\w']+", text.lower())
     return [porter2.stem(token) for token in tokens]
-
-def read_data(filename):
-    """
-    purpose: read all events from the json file.
-    parameter: 
-        filename - the path of json file in your local computer 
-    return: a list containing all raw tweets each of which has the data structure of dictionary
-    """
-    data = []
-    try:
-        with open(filename) as f:
-            for line in f:
-                data.append(json.loads(line.strip()))
-    except:
-        print "Failed to read data!"
-        return []
-    print "The json file has been successfully read!"
-    return data
 
 
 class CollectData():
@@ -79,6 +63,7 @@ class Recommender():
 		self.myevents = {}
 		self.listevents = []
 		self.eventdetails = {}
+		self.eventdescriptions = {}
 
 	def index_events(self,events):
 		self.myevents = json.loads(events)
@@ -98,16 +83,30 @@ class Recommender():
 		#print self.listevents
 		for x in self.listevents:
 			print ""
-			print x
+			#print x
 		return 0
 
 	def get_deets(self):
-		
 		for idx,event in enumerate(self.listevents):
-			self.eventdetails[idx] = dict(title = event['assetName'], phone = event['contactPhone'], homePage = event['homePageUrlAdr'])
+			self.eventdetails[idx] = dict(title = event['assetName'], phone = event['contactPhone'], homePage = event['homePageUrlAdr'], date = event['activityEndDate'], location = event['place']['placeName'], addressLine1 = event['place']['addressLine1Txt'], addressLine2 = event['place']['addressLine2Txt'], zipcode = event['place']['postalCode'], city = event['place']['cityName'], participants = event['assetLegacyData']['participationCriteriaTxt'])
+			print idx, ""
+			print self.eventdetails[idx]
+			print ""
 
-		print self.eventdetails
+		#for idx,event in enumerate(self.listevents):
+		#	self.eventdescriptions[idx] = dict(title = event['assetName'], description = event['assetDescription']['description'])
+		#	print idx, ""
+		#	print self.eventdescriptions[idx]
+		#	print ""
 
+		#print self.eventdetails
+
+			#self.details[x['assetName']].append(x['contactPhone'])
+			#self.details[x['assetName']].append(x['contactPhone'])
+			#self.details[x['assetName']].append(x['homePageUrlAdr'])
+			#self.details[x['assetName']].append(x['assetTags'])
+			#print self.details[x['assetTags']['tag']['tagName']]
+		#print self.listevents
 		# 'assetName' ---> The actual name of the event
 		# 'contactPhone'
 		# 'contactEmailAdr'
@@ -121,7 +120,8 @@ class Recommender():
 		# 'activityEndDate' ---> the last day to sign up for event
 		# 'assetAttributes'['attribute']['attributeValue'] ---> the things they check that they like will match these here
 		# 'avgUsrRatingTxt'
-		# 'participationCriteriaTxt' --> says Kids, Adules, Men, Women, all that stuff
+		# -------> , rating = event['assetLegacyData']['avgUsrRatingTxt']
+		# 'participationCriteriaTxt' --> says Kids, Adults, Family, Men, Women, all that stuff
 		# 'costAmt'
 		# 'placeName'
 		# 'addressLine1Txt'
@@ -141,6 +141,7 @@ def main():
     value = tc.return_data()
     rec = Recommender()
     rec.index_events(value)
+    rec.get_deets()
 
 
 if __name__ == "__main__":
