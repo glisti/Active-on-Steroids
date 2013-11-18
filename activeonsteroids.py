@@ -78,6 +78,7 @@ class Recommender():
 	def __init__(self):
 		self.myevents = {}
 		self.listevents = []
+		self.eventdetails = {}
 
 	def index_events(self,events):
 		self.myevents = json.loads(events)
@@ -101,6 +102,11 @@ class Recommender():
 		return 0
 
 	def get_deets(self):
+		
+		for idx,event in enumerate(self.listevents):
+			self.eventdetails[idx] = dict(title = event['assetName'], phone = event['contactPhone'], homePage = event['homePageUrlAdr'])
+
+		print self.eventdetails
 
 		# 'assetName' ---> The actual name of the event
 		# 'contactPhone'
