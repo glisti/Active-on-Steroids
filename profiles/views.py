@@ -12,7 +12,6 @@ from profiles.forms import RegistrationForm, LoginForm, EditForm
 def profile(request):
     # user is submitting a change to their profile
     if request.method == 'POST':
-        print "> POST"
         form = EditForm(request.POST)
         if form.is_valid():
             print "> FORM IS VALID"
@@ -41,7 +40,6 @@ def profile(request):
             print form.errors
     # the user is just viewing the profile
     else:
-        print "> VIEWING PROFILE"
         profile = Profile.objects.get(user=request.user)
         # user does not exist
         if profile == None:
@@ -114,8 +112,6 @@ def register(request):
             return HttpResponseRedirect('/profile/')
         # form was not valid
         else:
-            print "> FORM NOT VALID"
-            print form.errors
             context = {'form': form}
             return render(request,'profiles/register.html', context)
     # user is not submitting the form
