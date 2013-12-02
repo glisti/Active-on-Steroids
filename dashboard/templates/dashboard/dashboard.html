@@ -7,114 +7,36 @@
   <div class="jumbotron">
     <h1>Active on Steroids</h1>
     <p>
-      This space could be used to make some sort of statement or provide instructions for 
-      how to use the app. THE POSSIBILITIES ARE ENDLESS!!!
-    </p>
-    <p><a href="#" class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
+      
   </div>
 
   <hr/>
   <div class="row">
+    {#  #}
+    
+    {% for event in events %}
     <div class="col-md-4">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">
-            <a href="{% url 'dashboard:event' %}">The Fun Run</a>
-          </h3>
-        </div>
-        <div class="panel-body">
-          <ul>
-            <li>1/1/2014 12:59 pm</li>
-            <li>
-              <span class="glyphicon glyphicon-star"></span>
-              <span class="glyphicon glyphicon-star"></span>
-              <span class="glyphicon glyphicon-star"></span>
-              <span class="glyphicon glyphicon-star"></span>
-              <span class="glyphicon glyphicon-star"></span>
-            </li>
-            <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <a href="{% url 'dashboard:event' %}">Event Title</a>
+            <a href="{% url 'dashboard:event' %}">{{ event.title }}</a>
           </h3>
         </div>
         <div class="panel-body">
           Event details including:
           <ul>
-            <li>date</li>
-            <li>rating</li>
-            <li>small description</li>
+            <li>{{event.endDate}}</li>
+            <li>{{event.location}}</li>
+            <li>{{event.homePage}}</li>
+            <li>{{event.description}}</li>
           </ul>
         </div>
       </div>
-    </div><!-- /.col-md-4 -->
+       </div><!-- /.col-md-4 -->
+    {% endfor %}
+   
     <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <a href="{% url 'dashboard:event' %}">Event Title</a>
-          </h3>
-        </div>
-        <div class="panel-body">
-          Event details including:
-          <ul>
-            <li>date</li>
-            <li>rating</li>
-            <li>small description</li>
-          </ul>
-        </div>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <a href="{% url 'dashboard:event' %}">Event Title</a>
-          </h3>
-        </div>
-        <div class="panel-body">
-          Event details including:
-          <ul>
-            <li>date</li>
-            <li>rating</li>
-            <li>small description</li>
-          </ul>
-        </div>
-      </div>
-    </div><!-- /.col-md-4 -->
-    <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <a href="{% url 'dashboard:event' %}">Event Title</a>
-          </h3>
-        </div>
-        <div class="panel-body">
-          Event details including:
-          <ul>
-            <li>date</li>
-            <li>rating</li>
-            <li>small description</li>
-          </ul>
-        </div>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <a href="{% url 'dashboard:event' %}">Event Title</a>
-          </h3>
-        </div>
-        <div class="panel-body">
-          Event details including:
-          <ul>
-            <li>date</li>
-            <li>rating</li>
-            <li>small description</li>
-          </ul>
-        </div>
-      </div>
+
     </div><!-- /.col-md-4 -->
   </div><!--/.row -->
 {% endblock %}
