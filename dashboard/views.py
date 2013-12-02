@@ -12,12 +12,3 @@ def about(request):
 @login_required
 def event(request):
     return render(request, 'dashboard/event.html')
-
-# def profile(request):
-#     return render(request, 'dashboard/profile.html')
-
-# def login(request):
-#   return render(request, 'dashboard/login.html')
-
-# def logout(request):
-#   return render(request, 'dashboard/logout.html')
