@@ -40,25 +40,21 @@ def home(request):
     if profile.competitive == True:
         attrs += 'competitive '
 
-    es = info_recommender(profile.state, str(profile.zipcode), attrs)
-
-    events = [{"endDate": "2013-12-08T13:00:00", "description": "Join us at 7:00am on December 8, 2013 for year 3 of what is currently the highest rated marathon in the state of Texas (marathonguide.com). You?ll have the opportunity to explore the Bryan/College Station community as well as experience the Aggie spirit while you run throughout the Texas A&M campus. ", "title": "Scott & White BCS Marathon + Half Marathon", "zipCode": "77840", "phone": "9795748879", "addressLine2": "College Station", "location": "Wolf Pen Creek Park", "homePage": "http://www.bcsmarathon.com"}, {"endDate": "2013-12-07T14:00:00", "description": "All races start at Wolf Pen Creek, next to Post Oak Mall, and the entry fee is $12 per child. Start times for the Kid?s Marathon are as follows. We will start on time, so please plan to arrive early to your child?s race start.8:30   3-4 year olds (parents required to run with their children)9:00   5-6 year olds9:30   7-8 year olds10:00   9-10 year olds10:15   11-12 year olds", "title": "Scott & White Health Plan BCS Kid's Marathon", "zipCode": "77840", "phone": "9795748879", "addressLine2": "College Station", "location": "Wolf Pen Creek Park", "homePage": "http://bcsmarathon.com/kids/"}]
-    print type(es)
-
-    for k,v in es:
-        events.append(v)
-
-    print events
-
+    _events = info_recommender(profile.state, str(profile.zipcode), attrs)
+    events = [v for k,v in _events.iteritems()]
+    
+    request.session['events'] = events
     context = { 'events': events }
 
     return render(request, 'dashboard/dashboard.html', context)
 
-	
-
 @login_required
-def event(request):
-    return render(request, 'dashboard/event.html')
+def event(request, event_id):
+    eid = int(event_id)
+    event = request.session['events'][eid]
+    events = [e for idx, e in enumerate(request.session['events']) if idx != eid]
+    context = { 'event': event, 'events': events}
+    return render(request, 'dashboard/event.html', context)
 
 @login_required
 def about(request):

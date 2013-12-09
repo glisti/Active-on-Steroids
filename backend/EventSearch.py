@@ -9,8 +9,9 @@ from stemming import porter2
 import math
 import json
 import os
+import collections
 import sys
-from operator import itemgetter
+from operator import *
 
 class EventSearch(object):
     """ A search engine for events. """
@@ -21,65 +22,23 @@ class EventSearch(object):
             database - store events information
         """
         # database will be used to store events
-        #self.events = []
         self.database = {}
+        self.database2 = {}
         # used to store inverted index information for all terms/tokens
         self.inverted_index = {}
         # idf's for terms in collection
         self.idf = {}
         # key: docid value: vector(list) of tfidf's
         self.doc_vectors = {}
+
     def tokenize(self, text):
-        """
-        Take a string and split it into tokens on word boundaries.
-          
-        A token is defined to be one or more alphanumeric characters,
-        underscores, or apostrophes.  Remove all other punctuation, whitespace, and
-        empty tokens.  Do case-folding to make everything lowercase. This function
-        should return a list of the tokens in the input string.
-        """
         tokens = re.findall("[\w']+", text.lower())
         return [porter2.stem(token) for token in tokens]
 
-    def read_data(self, filename):
-        """
-        purpose: read all events from the json file.
-        parameter: 
-            filename - the path of json file in your local computer 
-        return: a list containing all raw events each of which has the data structure of dictionary
-        """
-        data = []
-        try:
-            with open(filename) as f:
-                for line in f:
-                    data.append(json.loads(line.strip()))
-        except:
-            print "Failed to read data!"
-            return []
-        print "The json file has been successfully read!"
-        return data
-
-    
     def _term_tf_idf(self, token, count):
-        """
-        purpose: Calculate tf-idf for a token in the document
-        parameters:
-            token - 
-            count - the number of occurrence of a term/token in one document
-        return: term/token's tf-idf
-        """
-
         return 0 if count == 0 else (1+math.log(count,2))*(self.idf[token])
                
     def CosineSim(self, vec_query, vec_doc):
-        """
-        purpose: Calculate cosine similarity for two documents (vectors)
-        parameters:
-            vec_query - the vector with only raw term frequency for query
-            vec_doc   - the vector of tf-idf for a document
-        return: cosine similarity between the query and a document
-        """
-
         doc_len = math.sqrt(sum(i**2 for i in vec_doc.itervalues()))
         q_len = math.sqrt(sum(i**2 for i in vec_query.itervalues()))
 
@@ -95,32 +54,18 @@ class EventSearch(object):
 
         
     def index_events(self,events):
-        """
-        purpose: process raw events and calculate tf-idf for all terms/tokens in events
-        parameters:
-          events - an iterator of event dictionaries
-        returns: none
-        """
+        for idx,event in enumerate(events):
+            #for idx, desc in enumerate(event):
+            curr_desc = events[event]
+            #self.database[idx] = dict(description = curr_desc, title = , rating = , date = , price = , URL = , location = , address = )
+            self.database[idx] = dict(number = event, description = curr_desc, cosine = 0)
 
-        # IN USER INTERFACE:
-        #Date, Rating (if it has it), title, description, price, URL, location, address
-        #related events
-        #every time you log in, recompiles
+            #self.database.append(curr_desc)
+            self.doc_vectors.setdefault(idx, {})
 
-        for event in events:
-            for idx, desc in enumerate(event):
-                #print events
-                curr_desc = event[desc][0]
-                #self.database[idx] = dict(description = curr_desc, title = , rating = , date = , price = , URL = , location = , address = )
-                self.database[idx] = dict(number = desc, description = curr_desc, cosine = 0)
-
-#self.eventdetails[idx] = dict(title = event['assetName'], phone = event['contactPhone'], homePage = event['homePageUrlAdr'], date = event['activityEndDate'], location = event['place']['placeName'], addressLine1 = event['place']['addressLine1Txt'], addressLine2 = event['place']['addressLine2Txt'], zipcode = event['place']['postalCode'], city = event['place']['cityName'], participants = event['assetLegacyData']['participationCriteriaTxt'], description = event['assetDescriptions'][idx]['description'])
-                #self.database.append(curr_desc)
-                self.doc_vectors.setdefault(idx, {})
-
-                for token in self.tokenize(curr_desc):
-                    self.inverted_index.setdefault(token, []).append(idx)
-                    self.doc_vectors[idx][token] = self.doc_vectors[idx].get(token, 0) + 1
+            for token in self.tokenize(curr_desc):
+                self.inverted_index.setdefault(token, []).append(idx)
+                self.doc_vectors[idx][token] = self.doc_vectors[idx].get(token, 0) + 1
 
         N = len(self.database)
 
@@ -133,7 +78,7 @@ class EventSearch(object):
             for term,tf in doc.iteritems():
                 self.doc_vectors[idx][term] = self._term_tf_idf(term,tf)
 
-    def search_results(self, query, zip_code):
+    def search_results(self, query):
         """
         purpose: rank all events we have based on the query using 
                 Vector Space Retrieval Model.
@@ -148,13 +93,8 @@ class EventSearch(object):
         # gather doc IDs
         docIDs = []
         for token in tokens:
-            print "\nUser Interest Token: ", token, '\n'
-            if token in self.inverted_index.keys():
+            if token in self.inverted_index:
                 docIDs += self.inverted_index[token]
-
-        if len(docIDs) == 0:
-            print "The activities you selected do not match any of the races in your area. Here are the top races around you:"
-            #self.top_results(zip_code) OR self.return_data('report.json') and then only return the top 6 of those
 
         # remove duplicates
         docIDs = list(set(docIDs))
@@ -170,34 +110,22 @@ class EventSearch(object):
             event = self.database[idx]
             simil = self.CosineSim(q_vec, self.doc_vectors[idx])
             self.database[idx]['cosine'] = simil
-            print "\nCosine similarity: ",simil, "Event:", self.database[idx]['description'], "Number:", self.database[idx]['number'], "\n"
+            print "Cosine similarity: ",simil, "Event:", self.database[idx]['description'], "Number:", self.database[idx]['number'], "\n"
             events.append(event)
-        
-        f = file('events_cos.json', 'wb')
-        saved = sys.stdout
-        sys.stdout = f
-        print json.dumps([x for x in sorted(events, key=lambda k: simil, reverse=True)])
-        sys.stdout = saved
-        f.close()
-        return [x for x in sorted(events, key=lambda k: simil, reverse=True)]
+        self.database = sorted(self.database.items(), key = lambda x : x[1], reverse=True)
+        for idx,tup in enumerate(self.database):
+            if tup[1]['cosine'] == 0:
+                print ""
+            else:
+                self.database2[idx] = dict(cosine = tup[1]['cosine'], description = tup[1]['description'], number = tup[1]['number'])
+        #print self.database2
+        return self.database2
 
-    # Returns global top 6 results from the user's zip code
-    #def top_results(self, zipcode):
-    #    print "The activities you selected do not match any of the races in your area. Here are the top races around you."
-    #    url = "http://api.amp.active.com/v2/search/?query=running&zip=" + zipcode + "&current_page=1&per_page=6&api_key=w6a5z75twefu4vcyrbq33rzg"
-    #    self.contents = urllib2.urlopen(url).read()
-    
-    def create_file(self):
-        f = file('events_cos.json', 'wb')
-        saved = sys.stdout
-        sys.stdout = f
-        print json.dumps(self.database)
-        sys.stdout = saved
-        f.close()
-
-    def returnable(self,filename, query, zip_code):
-        print "Test is starting..."
+    def returnable(self, diction, query):
+        # print "Test is starting..."
         _searcher = EventSearch()                                       # create our searcher
-        events = self.read_data(os.path.join(os.getcwd(), filename))    # read all events from json file
+        events = diction
         _searcher.index_events(events) 
-        output = _searcher.search_results(query, zip_code)
+        output = _searcher.search_results(query)
+        #print output
+        return output
