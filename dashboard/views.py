@@ -40,9 +40,17 @@ def home(request):
     if profile.competitive == True:
         attrs += 'competitive '
 
+    print attrs
+
+    _events = []
     _events = info_recommender(profile.state, str(profile.zipcode), attrs)
-    events = [v for k,v in _events.iteritems()]
-    
+
+    print _events
+    events = []
+    for k,v in _events.iteritems():
+        v['id'] = k
+        events.append(v)
+    request.session['events'] = []
     request.session['events'] = events
     context = { 'events': events }
 
@@ -52,7 +60,7 @@ def home(request):
 def event(request, event_id):
     eid = int(event_id)
     event = request.session['events'][eid]
-    events = [e for idx, e in enumerate(request.session['events']) if idx != eid]
+    events = [e for e in request.session['events'][3:] if e['id'] != eid]
     context = { 'event': event, 'events': events}
     return render(request, 'dashboard/event.html', context)
 

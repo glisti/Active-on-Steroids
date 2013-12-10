@@ -11,7 +11,6 @@ import json
 import os
 import collections
 import sys
-from operator import *
 
 class EventSearch(object):
     """ A search engine for events. """
@@ -110,7 +109,7 @@ class EventSearch(object):
             event = self.database[idx]
             simil = self.CosineSim(q_vec, self.doc_vectors[idx])
             self.database[idx]['cosine'] = simil
-            print "Cosine similarity: ",simil, "Event:", self.database[idx]['description'], "Number:", self.database[idx]['number'], "\n"
+            #print "Cosine similarity: ",simil, "Event:", self.database[idx]['description'], "Number:", self.database[idx]['number'], "\n"
             events.append(event)
         self.database = sorted(self.database.items(), key = lambda x : x[1], reverse=True)
         for idx,tup in enumerate(self.database):

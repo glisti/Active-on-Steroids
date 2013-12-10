@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}| The Fun Run {% endblock title %}
+{% block title %}| {{event.title}} {% endblock title %}
 
 {% block content %}
     
@@ -10,13 +10,27 @@
             <hr/>
             
             <h4>Date</h4>
-            <p>{{event.data}}</p>
+            <p>{{event.eventDate}}</p>
+
+            <h4>Signup End Date</h4>
+            <p>{{event.endDate}}</p>
             
             <h4>Location</h4>
+            {% if event.addressLine1 %}
+              <li>{{ event.addressLine1 }}</li>
+            {% endif %}
+            {% if event.addressLine2 %}
+              <li>{{ event.addressLine2 }}</li>
+            {% endif %}
             <p>{{event.location}}</p>
+
+            <h4>Home Page</h4>
+            <a href="{{event.homePage}}">{{event.homePage}}</a>
             
-            <h4>Desciption</h4>
-            <p>{{event.description}}</p>
+            {% if event.description %}
+            <h4>Description</h4>
+            {% autoescape off %}{{event.description}}{% endautoescape %}
+            {% endif %}
         </div><!--/.col-md-8 -->
 
         <div class="col-md-4">
@@ -25,14 +39,14 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-                        <a href="{# {% url 'dashboard:event' forloop.counter0 %} #}">{{e.title}}</a>
+                        <a href="{% url 'dashboard:event' e.id %}">{{e.title}}</a>
                     </h3>
                 </div>
                 <div class="panel-body">
                      Event details including:
                     <ul>
-                        <li>{{e.endDate}}</li>
-                        <li>{{e.location}}</li>
+                        <li>{{e.eventDate}}</li>
+                        <li>{{e.cityName}}, {{e.zipCode}}</li>
                         <li>{{e.homePage}}</li>
                     </ul>
                 </div>

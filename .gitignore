@@ -2,6 +2,7 @@ env
 draft
 staticfiles
 *.pyc
+*.json
 *.db
 .DS_Store
 .idea

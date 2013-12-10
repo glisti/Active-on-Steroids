@@ -5,37 +5,39 @@
 {% block content %}
   <!-- Main jumbotron for a primary marketing message or call to action -->
   <div class="jumbotron">
-    <h1>Active on Steroids</h1>
+    <h1>Active on Steroids Dashboard</h1>
     <p>
-      
+      Below are some events that we think you will enjoy. Modify your profile to
+      change your preferences!
+    </p>
   </div>
-
   <hr/>
   <div class="row">
-    
     {% for event in events %}
     <div class="col-md-4">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">
-            <a href="{% url 'dashboard:event' forloop.counter0 %}">{{ event.title }}</a>
+            <a href="{% url 'dashboard:event' event.id %}">{{ event.title }}</a>
           </h3>
         </div>
         <div class="panel-body">
           Event details including:
           <ul>
-            <li>{{event.endDate}}</li>
-            <li>{{event.location}}</li>
-            <li>{{event.homePage}}</li>
-            <li>{{event.description}}</li>
+            <li>{{ event.eventDate }}</li>
+            <li>{{ event.location }}</li>
+            {% if event.addressLine1 %}
+              <li>{{ event.addressLine1 }}</li>
+            {% endif %}
+            {% if event.addressLine2 %}
+              <li>{{ event.addressLine2 }}</li>
+            {% endif %}
+            <li>{{ event.cityName }}, {{ event.zipCode }}</li>
+            <li><a href="{{event.homePage}}">{{ event.homePage }}</a></li>
           </ul>
         </div>
       </div>
-       </div><!-- /.col-md-4 -->
-    {% endfor %}
-   
-    <div class="col-md-4">
-
     </div><!-- /.col-md-4 -->
+    {% endfor %}
   </div><!--/.row -->
 {% endblock %}
