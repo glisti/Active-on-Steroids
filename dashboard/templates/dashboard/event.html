@@ -9,13 +9,13 @@
             <h1>{{event.title}}</h1>
             <hr/>
             
-            <h4>Date</h4>
+            <h3>Date</h3>
             <p>{{event.eventDate}}</p>
 
-            <h4>Signup End Date</h4>
+            <h3>Signup End Date</h3>
             <p>{{event.endDate}}</p>
             
-            <h4>Location</h4>
+            <h3>Location</h3>
             {% if event.addressLine1 %}
               <li>{{ event.addressLine1 }}</li>
             {% endif %}
@@ -23,13 +23,17 @@
               <li>{{ event.addressLine2 }}</li>
             {% endif %}
             <p>{{event.location}}</p>
-
-            <h4>Home Page</h4>
-            <a href="{{event.homePage}}">{{event.homePage}}</a>
+            
+            {% if event.homePage %}
+                <h3>Home Page</h3>
+                <a href="{{event.homePage}}">{{event.homePage}}</a>
+            {% endif %}
             
             {% if event.description %}
-            <h4>Description</h4>
-            {% autoescape off %}{{event.description}}{% endautoescape %}
+            <h3>Description</h3>
+            <div class="well">
+                {% autoescape off %}{{event.description}}{% endautoescape %}
+            </div>
             {% endif %}
         </div><!--/.col-md-8 -->
 
@@ -43,11 +47,11 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                     Event details including:
+                     Event details include:
                     <ul>
                         <li>{{e.eventDate}}</li>
                         <li>{{e.cityName}}, {{e.zipCode}}</li>
-                        <li>{{e.homePage}}</li>
+                        <li><a href="{{e.homePage}}">{{e.homePage}}</a></li>
                     </ul>
                 </div>
             </div>

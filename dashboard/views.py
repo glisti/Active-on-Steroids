@@ -45,9 +45,10 @@ def home(request):
     _events = []
     _events = info_recommender(profile.state, str(profile.zipcode), attrs)
 
+    print '====='
     print _events
     events = []
-    for k,v in _events.iteritems():
+    for k,v in enumerate(_events):
         v['id'] = k
         events.append(v)
     request.session['events'] = []
@@ -60,7 +61,7 @@ def home(request):
 def event(request, event_id):
     eid = int(event_id)
     event = request.session['events'][eid]
-    events = [e for e in request.session['events'][3:] if e['id'] != eid]
+    events = [e for e in request.session['events'][:3] if e['id'] != eid]
     context = { 'event': event, 'events': events}
     return render(request, 'dashboard/event.html', context)
 

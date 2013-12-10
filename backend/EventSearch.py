@@ -121,7 +121,7 @@ class EventSearch(object):
         return self.database2
 
     def returnable(self, diction, query):
-        # print "Test is starting..."
+        print "Test is starting..."
         _searcher = EventSearch()                                       # create our searcher
         events = diction
         _searcher.index_events(events) 
